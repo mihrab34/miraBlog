@@ -1,3 +1,5 @@
+import {Link} from 'react-router-dom'
+
 export default function Post(props) {
   return (
     <div class="card shadow-sm">
@@ -23,15 +25,15 @@ export default function Post(props) {
           This is a wider card with supporting text below as a natural lead-in
           to additional content. This content is a little bit longer.
         </p>
+        <div className="mx-auto text-center">
+          <Link to={"/api/blog/post/1"} class="btn btn-sm btn-outline-secondary">
+            Continue Reading
+          </Link>
+        </div>
+
+        <hr />
         <div class="d-flex justify-content-between align-items-center">
-          <div class="btn-group">
-            <button type="button" class="btn btn-sm btn-outline-secondary">
-              View
-            </button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">
-              Edit
-            </button>
-          </div>
+          <p>By Author's name</p>
           <small class="text-muted">9 mins</small>
         </div>
       </div>
