@@ -185,6 +185,7 @@ exports.addComment = async (req, res) => {
   try {
     const post = await BlogPost.findById(req.params.id);;
     post.comments.push(req.body);
+    post.comment_count += 1;
     await post.save();
     if (post) {
       res.status(201).json({
@@ -286,6 +287,7 @@ exports.replyComment = async (req, res) => {
   try {
     const post = await BlogPost.findById(req.params.id);
     post.comments.id(req.params.cid).replies.push(req.body);
+    post.comments.id(req.params.cid).reply_count += 1;
     await post.save();
     if (post) {
       return res.status(201).json({

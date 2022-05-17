@@ -1,4 +1,17 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+
+const Reply = new mongoose.Schema({
+  author: {
+    type: String,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  text: {
+    type: String,
+  },
+});
 
 const Comment = new mongoose.Schema({
   author: {
@@ -19,13 +32,12 @@ const Comment = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  reply: {
-    type: String,
-  },
+  replies: [Reply],
+
   reply_count: {
     type: Number,
     default: 0,
-  }
+  },
 });
 
 const BlogPost = new mongoose.Schema({
