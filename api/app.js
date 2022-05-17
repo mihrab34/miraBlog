@@ -2,11 +2,13 @@ require('dotenv').config()
 
 const createError = require('http-errors');
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
 
 
 app.use(express.json());
+app.use(cors());
 
 const postRouter = require("./src/routes/postRoute");
 app.use('/api/blog/posts', postRouter);
@@ -14,7 +16,7 @@ app.use('/api/blog/posts', postRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
-});
+});animes;
 
 // error handler
 app.use(function(err, req, res, next) {
