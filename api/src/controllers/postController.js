@@ -153,7 +153,32 @@ exports.like = async (req, res) => {
 };
 
 exports.dislike = (req, res) => {
-  res.send("Dislikes");
+  try {
+    const post = await BlogPost.findById(req.params.id);
+    if (post.dislike_count) {
+      post.dislike_count += 1;
+    } else {
+      post.dislike_count = 1;
+    }
+    await post.save();
+    if (post) {
+      return res.status(200).json({
+        status: true,
+        message: "Post Disliked",
+        data: post,
+      });
+    } else {
+      return res.status(400).json({
+        status: false,
+        message: "Post Dislike failed",
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      status: true,
+      message: err.message,
+    });
+  }
 };
 
 exports.addComment = async (req, res) => {
@@ -206,23 +231,11 @@ exports.comments = async(req, res) => {
 
 exports.editComment = async(req, res) => {
   try {
-    // let modifiedObj = {}
-    // for (const [property, value] of Object.entries(req.body)){
-    //   modifiedObj={ "comments.$.text": value}
-    //   console.log(modifiedObj);
-    // }
-    
-    // const comment = BlogPost.updateOne(
-    //   { _id: req.params.id, "comments._id": req.params.cid },
-    //   { $set: modifiedObj }
-    // );
     const post = await BlogPost.findById(req.params.id);
     for (const [property, value] of Object.entries(req.body)){
    post.comments.id(req.params.cid)[property] = value;
     }
-    // post.comments.id(req.params.cid).text = req.body.text;
     await post.save();
-    // console.log(comment.text);
     if (post) {
       return res.status(200).json({
         status: true,
@@ -244,10 +257,52 @@ exports.editComment = async(req, res) => {
   }
 };
 
-exports.deleteComment = (req, res) => {
-  res.send("Delete a comment");
+exports.deleteComment = async (req, res) => {
+  try {
+    const post = await BlogPost.findById(req.params.id);
+    post.comments.pull(req.params.cid);
+    await post.save();
+    if (post) {
+      return res.status(200).json({
+        status: true,
+        message: "Comment delete successful",
+        data: post,
+      });
+    } else {
+      return res.status(400).json({
+        status: false,
+        message: "Comment delete failed",
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      status: true,
+      message: err.message,
+    });
+  }
 };
 
-exports.replyComment = (req, res) => {
-  res.send("Reply a comment");
+exports.replyComment = async (req, res) => {
+  try {
+    const post = await BlogPost.findById(req.params.id);
+    post.comments.id(req.params.cid).replies.push(req.body);
+    await post.save();
+    if (post) {
+      return res.status(201).json({
+        status: true,
+        message: "Reply added successfully",
+        data: post,
+      });
+    } else {
+      return res.status(400).json({
+        status: false,
+        message: "Reply not added",
+      });
+    }
+  } catch (err) {
+    return res.status(406).json({
+      status: true,
+      message: err.message,
+    });
+  }
 };
