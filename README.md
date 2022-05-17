@@ -61,6 +61,9 @@ Components
                #enpoint-/api/blog/posts/:id/comments/:cid/reply(POST)
    *ReplyButton
    *Reply #apiPoints -/api/blog/posts/:id/comments/:cid/reply/:rid'(GET) 
+   *PopularPost
+   * LatestPost
+   * Footer
 component tree
  App
    Navbar
