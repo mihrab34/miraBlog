@@ -162,6 +162,7 @@ exports.dislike = async (req, res) => {
     } else {
       post.dislike_count = 1;
     }
+    post.like_count -= 1;
     await post.save();
     if (post) {
       return res.status(200).json({

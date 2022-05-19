@@ -9,14 +9,14 @@ export function withRouter(Component) {
   return ComponentWithRouterProp;
 }
 
-export let abortSignal = new AbortController()
+export let controller = new AbortController()
 
-export const connectToApi = async (endpoint, method = "GET", data = null) => {
-  const baseUrl = "http://localhost:5050/api/blog/posts";
+export const connectToApi = async (endpoint, method = "GET", signal=null, data = null) => {
+  const baseUrl = "http://localhost:5050/api/blog";
   let options = {
     mode: "cors",
     method: method,
-    signal: abortSignal.signal,
+    signal: signal ? signal : controller.signal,
     headers: { "Content-Type": "application/json" },
   };
 
