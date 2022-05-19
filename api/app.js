@@ -16,7 +16,7 @@ app.use('/api/blog/posts', postRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
-});animes;
+});
 
 // error handler
 app.use(function(err, req, res, next) {

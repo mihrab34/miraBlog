@@ -3,6 +3,8 @@ import Navbar from "./Navbar";
 import BlogHeader from "./BlogHeader";
 import PostList from "./Post/PostList";
 import PostDetail from "./Post/PostDetail";
+import PopularPost from './Post/PopularPost';
+import LatestPost from './Post/LatestPost';
 
 import Footer from "./Footer";
 
@@ -22,7 +24,8 @@ function App() {
                 </Routes>
               </div>
               <div className="col-lg-4 col-md-5 col-sm-12">
-                <PostList />
+                <PopularPost />
+                <LatestPost />
               </div>
             </div>
           </div>

@@ -1,8 +1,9 @@
 import Post from './Post';
 export default function PostList() {
-    return  (
-        <>
+    return (
+      <>
         <Post />
-        </>
-    )
+        <Post />
+      </>
+    );
 }

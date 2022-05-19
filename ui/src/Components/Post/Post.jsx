@@ -2,7 +2,7 @@ import {Link} from 'react-router-dom'
 
 export default function Post(props) {
   return (
-    <div class="card shadow-sm">
+    <div class="card shadow-sm mb-4">
       <svg
         class="bd-placeholder-img card-img-top"
         width="100%"
@@ -21,6 +21,9 @@ export default function Post(props) {
       </svg>
 
       <div class="card-body">
+        <div className="card-title text-center py-3">
+          <h3>Card Title</h3>
+        </div>
         <p class="card-text">
           This is a wider card with supporting text below as a natural lead-in
           to additional content. This content is a little bit longer.

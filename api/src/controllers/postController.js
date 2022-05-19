@@ -29,6 +29,8 @@ exports.index = async (req, res) => {
 exports.blogPost = async (req, res) => {
   try {
     const blogPost = await BlogPost.findById(req.params.id);
+    blogPost.view_count += 1;
+    blogPost.save();
     if (blogPost) {
       res.status(200).json({
         status: true,
@@ -152,7 +154,7 @@ exports.like = async (req, res) => {
   }
 };
 
-exports.dislike = (req, res) => {
+exports.dislike = async (req, res) => {
   try {
     const post = await BlogPost.findById(req.params.id);
     if (post.dislike_count) {
