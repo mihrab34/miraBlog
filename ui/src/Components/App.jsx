@@ -5,6 +5,7 @@ import PostList from "./Post/PostList";
 import PostDetail from "./Post/PostDetail";
 import PopularPost from './Post/PopularPost';
 import LatestPost from './Post/LatestPost';
+import PostForm from './Post/PostForm';
 
 import Footer from "./Footer";
 
@@ -20,7 +21,8 @@ function App() {
               <div className="col-lg-8 col-md-7 col-sm-12">
                 <Routes>
                   <Route path="/" exact element={<PostList />} />
-                  <Route path="/api/blog/post/:id" element={<PostDetail />} />
+                  <Route path="/post/:id" element={<PostDetail />} />
+                  <Route path="/post/add" element={<PostForm action={"add"} />} />
                 </Routes>
               </div>
               <div className="col-lg-4 col-md-5 col-sm-12">

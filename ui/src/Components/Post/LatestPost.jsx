@@ -1,7 +1,7 @@
 export default function LatestPost() {
   return (
     <div className="card mb-3">
-        <h1>LATEST POSTS</h1>
+      <h3 className="text-center py-4">LATEST POSTS</h3>
       <div className="row g-0">
         <div className="col-md-4">
           <img src="..." className="img-fluid rounded-start" alt="..." />

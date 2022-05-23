@@ -1,34 +1,23 @@
-export default function PostDetail(props) {
-    return (
-      <div class="card shadow-sm">
-        <svg
-          class="bd-placeholder-img card-img-top"
-          width="100%"
-          height="225"
-          xmlns="http://www.w3.org/2000/svg"
-          role="img"
-          aria-label="Placeholder: Thumbnail"
-          preserveAspectRatio="xMidYMid slice"
-          focusable="false"
-        >
-          <title>Placeholder</title>
-          <rect width="100%" height="100%" fill="#55595c" />
-          <text x="50%" y="50%" fill="#eceeef" dy=".3em">
-            Thumbnail
-          </text>
-        </svg>
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { connectToApi } from "../../lib/helper";
+import Post from "./Post";
 
-        <div class="card-body">
-          <h1>Read Full Post</h1>
-          <p class="card-text">
-            This is a wider card with supporting text below as a natural lead-in
-            to additional content. This content is a little bit longer.
-          </p>
-          <div class="d-flex justify-content-between align-items-center">
-            <p>By Author's name</p>
-            <small class="text-muted">9 mins</small>
-          </div>
-        </div>
-      </div>
-    );
+export default function PostDetail() {
+  const [singlePost, setSinglePost] = useState({});
+  const { id } = useParams();
+
+  useEffect(() => {
+    const getPost = async () => {
+      const response = await connectToApi(`/posts/${id}`);
+      setSinglePost(response.data);
+    };
+    getPost();
+  }, [id]);
+
+  return (
+    <>
+      <Post post={singlePost} single={true} />
+    </>
+  );
 }

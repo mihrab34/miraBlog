@@ -4,11 +4,15 @@ import Reaction from "../Reaction/Reaction";
 import { connectToApi } from "../../lib/helper";
 
 export default function Post(props) {
-  const [post, setPost] = useState(props.post);
+  const [post, setPost] = useState({});
+
+  React.useEffect(() => {
+    setPost(props.post);
+  }, [props.post]);
 
   const handleLike = async () => {
     const { _id: id } = post;
-    const response = await connectToApi(`/posts/${id}/like`, "PUT", post);
+    const response = await connectToApi(`/posts/${id}/like`, "POST");
     setPost(response.data);
   };
 
@@ -18,7 +22,8 @@ export default function Post(props) {
     setPost(response.data);
   };
 
-  const { _id, post_title, summary, author, date } = props.post;
+  const { _id, post_title, summary, article, author, date } = post;
+  const { single = false } = props;
   return (
     <div className="card shadow-sm mb-4">
       <svg
@@ -42,15 +47,15 @@ export default function Post(props) {
         <div className="card-title text-center py-3">
           <h3>{post_title}</h3>
         </div>
-        <p className="card-text">{summary}</p>
-        <div className="mx-auto text-center">
-          <Link
-            to={"/api/blog/post/" + _id}
-            className="btn btn-sm btn-outline-info"
-          >
-            Continue Reading
-          </Link>
-        </div>
+
+        <p className="card-text">{single ? article : summary}</p>
+        {!single && (
+          <div className="mx-auto text-center">
+            <Link to={"/post/" + _id} className="btn btn-sm btn-outline-info">
+              Continue Reading
+            </Link>
+          </div>
+        )}
 
         <hr />
         <div className="d-flex justify-content-between align-items-center">
