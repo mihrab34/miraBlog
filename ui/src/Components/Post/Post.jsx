@@ -11,37 +11,49 @@ export default function Post(props) {
   }, [props.post]);
 
   const handleLike = async () => {
+    
     const { _id: id } = post;
-    const response = await connectToApi(`/posts/${id}/like`, "POST");
+    const response = await connectToApi(`/posts/${id}/like`, "PUT");
     setPost(response.data);
+    alert("like post");
   };
 
   const handleDislike = async () => {
     const { _id: id } = post;
-    const response = await connectToApi(`/posts/${id}/dislike`, "POST");
+    const response = await connectToApi(`/posts/${id}/dislike`, "PUT");
     setPost(response.data);
   };
 
-  const { _id, post_title, summary, article, author, date } = post;
+  const { _id, post_title, summary, article, author, date, image } = post;
   const { single = false } = props;
   return (
     <div className="card shadow-sm mb-4">
-      <svg
-        className="bd-placeholder-img card-img-top"
-        width="100%"
-        height="225"
-        xmlns="http://www.w3.org/2000/svg"
-        role="img"
-        aria-label="Placeholder: Thumbnail"
-        preserveAspectRatio="xMidYMid slice"
-        focusable="false"
-      >
-        <title>Placeholder</title>
-        <rect width="100%" height="100%" fill="#55595c" />
-        <text x="50%" y="50%" fill="#eceeef" dy=".3em">
-          Thumbnail
-        </text>
-      </svg>
+      {image ? (
+        <img
+          src={image}
+          alt="Post-Cover"
+          className="card-img-top"
+          width="100%"
+          height="750"
+        />
+      ) : (
+        <svg
+          className="bd-placeholder-img card-img-top"
+          width="100%"
+          height="225"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-label="Placeholder: Thumbnail"
+          preserveAspectRatio="xMidYMid slice"
+          focusable="false"
+        >
+          <title>Placeholder</title>
+          <rect width="100%" height="100%" fill="#55595c" />
+          <text x="50%" y="50%" fill="#eceeef" dy=".3em">
+            Thumbnail
+          </text>
+        </svg>
+      )}
 
       <div className="card-body">
         <div className="card-title text-center py-3">

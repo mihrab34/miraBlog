@@ -3,10 +3,11 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
 const initialValues = {
+  image: "",
   article: "",
   author: "",
   comment_count: 0,
-  comments: [],
+  // comments: [],
   date: new Date(),
   dislike_count: 0,
   like_count: 0,
@@ -20,20 +21,25 @@ export default function PostForm(props) {
   const { id } = useParams();
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
-    setPost({ ...post, [name]: value });
+    const { name, value, files, type } = event.target;
+    if (type === "file") {
+      setPost({ ...post, [name]: files[0] });
+    } else {
+      setPost({ ...post, [name]: value });
+    }
   };
+  // console.log(post);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const action = this.props.action;
-    
+    const action = props.action;
+
     switch (action) {
       case "add":
-        await connectToApi("/", "POST", post);
+        await connectToApi("/posts", "POST", post, true);
         break;
       case "edit":
-        await connectToApi("//" + id, "PUT", post);
+        await connectToApi("/posts/" + id, "PUT", post);
         break;
       default:
         break;
@@ -42,6 +48,18 @@ export default function PostForm(props) {
 
   return (
     <form className="pt-5">
+      <div className="mb-3">
+        <label htmlFor="task" className="form-label">
+          Post Cover
+        </label>
+        <input
+          type="file"
+          className="form-control"
+          id="image"
+          name="image"
+          onChange={(e) => handleChange(e)}
+        />
+      </div>
       <div className="mb-3">
         <label htmlFor="task" className="form-label">
           Author
@@ -88,7 +106,7 @@ export default function PostForm(props) {
         ></textarea>
       </div>
 
-      <button type="submit" className="btn btn-success">
+      <button type="submit" className="btn btn-success" onClick={handleSubmit}>
         Publish
       </button>
     </form>

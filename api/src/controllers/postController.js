@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
   }
 });
 
-exports.upload = multer({ storage: storage });
+exports.upload = multer({ storage: storage }).single("image");
 
 //display all posts
 exports.index = async (req, res) => {
@@ -66,11 +66,8 @@ exports.blogPost = async (req, res) => {
 
 //add a post
 exports.add = async (req, res) => {
-  
-  
- 
   try {    
-    const url = req.protocol + "//" + req.get("host");
+    const url = req.protocol + "://" + req.get("host");
   let imagePath = "";
   if (req.file) {
     imagePath = url + "/public/images/" + req.file.filename;
@@ -91,6 +88,7 @@ exports.add = async (req, res) => {
       });
     }
   } catch (err) {
+    console.error(err)
     res.status(500).json({
       status: true,
       message: err.message,
@@ -155,6 +153,7 @@ exports.like = async (req, res) => {
     } else {
       post.like_count = 1;
     }
+    post.dislike_count -= 1;
     await post.save();
     if (post) {
       return res.status(200).json({

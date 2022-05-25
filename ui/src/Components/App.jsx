@@ -22,7 +22,14 @@ function App() {
                 <Routes>
                   <Route path="/" exact element={<PostList />} />
                   <Route path="/post/:id" element={<PostDetail />} />
-                  <Route path="/post/add" element={<PostForm action={"add"} />} />
+                  <Route
+                    path="/post/add"
+                    element={<PostForm action={"add"} />}
+                  />
+                  <Route
+                    path="/post/edit/:id"
+                    element={<PostForm action={"add"} />}
+                  />
                 </Routes>
               </div>
               <div className="col-lg-4 col-md-5 col-sm-12">

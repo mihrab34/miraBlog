@@ -11,20 +11,43 @@ export function withRouter(Component) {
 
 export let controller;
 
-export const connectToApi = async (endpoint, method = "GET", data = null) => {
+export const connectToApi = async (
+  endpoint,
+  method = "GET",
+  data = null,
+  upload = false
+) => {
   controller = new AbortController();
-  const baseUrl = "http://localhost:5050/api/blog";
+  const baseUrl = "http://localhost:7000/api/blog";
   let options = {
     mode: "cors",
     method: method,
     signal: controller.signal,
-    headers: { "Content-Type": "application/json" },
   };
 
+  let optionsData;
   if (data) {
-    let optionsData = { ...options, body: JSON.stringify(data) };
+    if (upload) {
+      let formData = new FormData();
+      for (const [key, value] of Object.entries(data)) {
+        formData.append(key, value);
+      }
+
+      optionsData = { ...options, body: formData };
+      options = optionsData;
+    } else {
+      optionsData = {
+        ...options,
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+      };
+      options = optionsData;
+    }
+  }else {
+    optionsData = {...options, headers: { "Content-Type": "application/json" }};
     options = optionsData;
   }
+
   const response = await fetch(baseUrl + endpoint, options);
   return response.json();
 };
