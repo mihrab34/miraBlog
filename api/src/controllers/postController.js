@@ -1,5 +1,18 @@
 require("../models/mongooseConnection");
 const BlogPost = require("../models/Post");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/images/");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + file.originalname;
+    cb(null, file.fieldname + "-" + uniqueSuffix);
+  }
+});
+
+exports.upload = multer({ storage: storage });
 
 //display all posts
 exports.index = async (req, res) => {
@@ -53,8 +66,17 @@ exports.blogPost = async (req, res) => {
 
 //add a post
 exports.add = async (req, res) => {
-  try {
+  
+  
+ 
+  try {    
+    const url = req.protocol + "//" + req.get("host");
+  let imagePath = "";
+  if (req.file) {
+    imagePath = url + "/public/images/" + req.file.filename;
+  }
     const post = new BlogPost(req.body);
+    post.image = imagePath;
     await post.save();
     if (post) {
       res.status(201).json({
@@ -186,7 +208,7 @@ exports.dislike = async (req, res) => {
 
 exports.addComment = async (req, res) => {
   try {
-    const post = await BlogPost.findById(req.params.id);;
+    const post = await BlogPost.findById(req.params.id);
     post.comments.push(req.body);
     post.comment_count += 1;
     await post.save();
@@ -210,7 +232,7 @@ exports.addComment = async (req, res) => {
   }
 };
 
-exports.comments = async(req, res) => {
+exports.comments = async (req, res) => {
   try {
     const post = await BlogPost.findById(req.params.id);
     if (post.comments) {
@@ -233,11 +255,11 @@ exports.comments = async(req, res) => {
   }
 };
 
-exports.editComment = async(req, res) => {
+exports.editComment = async (req, res) => {
   try {
     const post = await BlogPost.findById(req.params.id);
-    for (const [property, value] of Object.entries(req.body)){
-   post.comments.id(req.params.cid)[property] = value;
+    for (const [property, value] of Object.entries(req.body)) {
+      post.comments.id(req.params.cid)[property] = value;
     }
     await post.save();
     if (post) {
@@ -253,7 +275,7 @@ exports.editComment = async(req, res) => {
       });
     }
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return res.status(500).json({
       status: true,
       message: err.message,

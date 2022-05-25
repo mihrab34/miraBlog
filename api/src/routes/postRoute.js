@@ -4,7 +4,7 @@ const controller = require('../controllers/postController');
 // post routes
 router.get('/', controller.index);
 router.get('/:id', controller.blogPost);
-router.post('/', controller.add);
+router.post("/", controller.upload.single("image"), controller.add);
 router.put('/:id', controller.edit);
 router.delete('/:id', controller.delete);
 router.put('/:id/like', controller.like);
