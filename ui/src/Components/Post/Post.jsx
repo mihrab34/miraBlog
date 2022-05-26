@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Reaction from "../Reaction/Reaction";
 import { connectToApi } from "../../lib/helper";
+import TimeAgo from "./TimeAgo";
 
 export default function Post(props) {
   const [post, setPost] = useState({});
@@ -72,7 +73,7 @@ export default function Post(props) {
         <hr />
         <div className="d-flex justify-content-between align-items-center">
           <div>
-            By <span>{author}</span> on {new Date(date).toDateString()}
+            By <span>{author}</span> <TimeAgo date={date} />
           </div>
           <div>
             <Reaction

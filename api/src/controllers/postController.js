@@ -17,7 +17,7 @@ exports.upload = multer({ storage: storage }).single("image");
 //display all posts
 exports.index = async (req, res) => {
   try {
-    const posts = await BlogPost.find({});
+    const posts = await BlogPost.find({}).sort({date: -1}).limit(2);
     if (posts) {
       res.status(200).json({
         status: true,
