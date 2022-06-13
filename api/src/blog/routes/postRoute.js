@@ -5,7 +5,7 @@ const controller = require('../controllers/postController');
 router.get('/', controller.index);
 router.get('/:id', controller.blogPost);
 router.post("/", controller.upload, controller.add);
-router.put('/:id', controller.edit);
+router.put("/:id", controller.upload, controller.edit);
 router.delete('/:id', controller.delete);
 router.put('/:id/like', controller.like);
 router.put('/:id/dislike', controller.dislike);

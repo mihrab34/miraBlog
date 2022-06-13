@@ -1,18 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import Reaction from "../Reaction/Reaction";
 import { connectToApi } from "../../lib/helper";
 import TimeAgo from "./TimeAgo";
+import {PostContext} from "../context/PostContext";
 
 export default function Post(props) {
+  let blogPost = useContext(PostContext); ;
+  if(props.post) {
+    blogPost = props.post
+  }
   const [post, setPost] = useState({});
 
-  React.useEffect(() => {
-    setPost(props.post);
-  }, [props.post]);
+  useEffect(() => {
+    setPost(blogPost);
+  }, [blogPost]);
 
   const handleLike = async () => {
-    
     const { _id: id } = post;
     const response = await connectToApi(`/posts/${id}/like`, "PUT");
     setPost(response.data);

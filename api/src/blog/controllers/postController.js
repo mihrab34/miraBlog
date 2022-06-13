@@ -1,4 +1,4 @@
-require("../models/mongooseConnection");
+require("../../mongooseConnection");
 const BlogPost = require("../models/Post");
 const multer = require("multer");
 
@@ -9,7 +9,7 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + file.originalname;
     cb(null, file.fieldname + "-" + uniqueSuffix);
-  }
+  },
 });
 
 exports.upload = multer({ storage: storage }).single("image");
@@ -17,7 +17,7 @@ exports.upload = multer({ storage: storage }).single("image");
 //display all posts
 exports.index = async (req, res) => {
   try {
-    const posts = await BlogPost.find({}).sort({date: -1}).limit(2);
+    const posts = await BlogPost.find({}).sort({ date: -1 }).limit(2);
     if (posts) {
       res.status(200).json({
         status: true,
@@ -66,12 +66,12 @@ exports.blogPost = async (req, res) => {
 
 //add a post
 exports.add = async (req, res) => {
-  try {    
+  try {
     const url = req.protocol + "://" + req.get("host");
-  let imagePath = "";
-  if (req.file) {
-    imagePath = url + "/public/images/" + req.file.filename;
-  }
+    let imagePath = "";
+    if (req.file) {
+      imagePath = url + "/public/images/" + req.file.filename;
+    }
     const post = new BlogPost(req.body);
     post.image = imagePath;
     await post.save();
@@ -88,7 +88,7 @@ exports.add = async (req, res) => {
       });
     }
   } catch (err) {
-    console.error(err)
+    console.error(err);
     res.status(500).json({
       status: true,
       message: err.message,
@@ -99,7 +99,14 @@ exports.add = async (req, res) => {
 // edit a post
 exports.edit = async (req, res) => {
   try {
-    const post = await BlogPost.updateOne({ _id: req.params.id }, req.body);
+    const url = req.protocol + "://" + req.get("host");
+    let imagePath = "";
+    if (req.file) {
+      imagePath = url + "/public/images/" + req.file.filename;
+    }
+    const updatedPost = {...req.body, image:imagePath}
+    post.image = imagePath;
+    const post = await BlogPost.updateOne({ _id: req.params.id }, updatedPost);
     if (post) {
       return res.status(200).json({
         status: true,

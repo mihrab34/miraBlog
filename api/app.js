@@ -11,8 +11,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-const postRouter = require("./src/routes/postRoute");
+const postRouter = require("./src/blog/routes/postRoute");
 app.use("/api/blog/posts", postRouter);
+
+const userRouter = require("./src/user/routes/userRoute");
+app.use("/api/users", userRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

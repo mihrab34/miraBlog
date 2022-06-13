@@ -9,8 +9,13 @@ export default function Navbar() {
             <strong>Home</strong>
           </Link>
           <div className="navbar-toggler">
-            <Link to="post/add" className="btn btn-dark">New Post</Link>
+            <Link to="post/add" className="btn btn-dark">
+              New Post
+            </Link>
           </div>
+          <ul className="navbar-nav justify-content-end ">
+            <li className="nav-item"><Link to="/login" className="nav-link">Sign In</Link></li>
+          </ul>
         </div>
       </div>
     </header>
