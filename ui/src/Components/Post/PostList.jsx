@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Post from "./Post";
-import { connectToApi, controller } from "../../lib/helper";
+import useApi from "../../Hooks/useApi";
 
 export default function PostList() {
   const [posts, setPosts] = useState([]);
+  const{openCall, controller} = useApi();
 
   useEffect(() => {
     const getPost = async () => {
-      const response = await connectToApi("/posts");
+      const response = await openCall("/posts");
       setPosts(response.data);
     };
 

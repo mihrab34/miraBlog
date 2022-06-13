@@ -2,14 +2,6 @@ const router = require("express").Router();
 const controller = require("../controller/user");
 const authenticateUser = require("../../middlewares/authenticateUser")
 
-// const checkAuthenticated = (req, res, next) => {
-// res.locals.isAuthenticated = false;
-// if(req.user){
-//     res.locals.isAuthenticated = true;
-// }
-// next();
-// }
-
 // Routes Endpoints
 // testpassword
 // philomina, boyz123

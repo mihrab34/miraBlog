@@ -1,20 +1,25 @@
 const router = require('express').Router();
 const controller = require('../controllers/postController');
+const authenticateUser = require("../../middlewares/authenticateUser");
 
 // post routes
-router.get('/', controller.index);
-router.get('/:id', controller.blogPost);
-router.post("/", controller.upload, controller.add);
-router.put("/:id", controller.upload, controller.edit);
-router.delete('/:id', controller.delete);
-router.put('/:id/like', controller.like);
-router.put('/:id/dislike', controller.dislike);
+router.get('/',  controller.index);
+router.get('/:id', authenticateUser, controller.blogPost);
+router.post("/", authenticateUser, controller.upload, controller.add);
+router.put("/:id", authenticateUser, controller.upload, controller.edit);
+router.delete("/:id", authenticateUser, controller.delete);
+router.put("/:id/like", authenticateUser, controller.like);
+router.put("/:id/dislike", authenticateUser, controller.dislike);
 
 //comment routes
-router.get( '/:id/comments',controller.comments)
-router.post('/:id/comments',controller.addComment)
-router.put('/:id/comments/:cid',controller.editComment)
-router.delete('/:id/comments/:cid',controller.deleteComment)
-router.post('/:id/comments/:cid/reply',controller.replyComment)
+router.get("/:id/comments", authenticateUser, controller.comments);
+router.post("/:id/comments", authenticateUser, controller.addComment);
+router.put("/:id/comments/:cid", authenticateUser, controller.editComment);
+router.delete("/:id/comments/:cid", authenticateUser, controller.deleteComment);
+router.post(
+  "/:id/comments/:cid/reply",
+  authenticateUser,
+  controller.replyComment
+);
 
 module.exports = router;

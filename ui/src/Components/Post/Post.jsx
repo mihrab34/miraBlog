@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Reaction from "../Reaction/Reaction";
 import { connectToApi } from "../../lib/helper";
 import TimeAgo from "./TimeAgo";
-import {PostContext} from "../context/PostContext";
+import {PostContext} from "../../Context/PostContext";
 
 export default function Post(props) {
   let blogPost = useContext(PostContext); ;

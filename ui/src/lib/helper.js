@@ -10,7 +10,7 @@ export function withRouter(Component) {
 }
 
 export let controller;
-
+const baseUrl = "http://localhost:7000/api/blog";
 export const connectToApi = async (
   endpoint,
   method = "GET",
@@ -18,7 +18,6 @@ export const connectToApi = async (
   upload = false
 ) => {
   controller = new AbortController();
-  const baseUrl = "http://localhost:7000/api/blog";
   let options = {
     mode: "cors",
     method: method,
@@ -55,9 +54,15 @@ export const connectToApi = async (
   return response.json();
 };
 
-export const connectToProtectedApi = async (endpoint,accessToken = "",method = "GET",data = null,upload = false) => {
+export const connectToProtectedApi = async (
+  endpoint,
+  accessToken = "",
+  method = "GET",
+  data = null,
+  upload = false
+) => {
   controller = new AbortController();
-  const baseUrl = "http://localhost:7000/api/blog";
+
   let options = {
     mode: "cors",
     method: method,
@@ -80,7 +85,7 @@ export const connectToProtectedApi = async (endpoint,accessToken = "",method = "
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
-          "authorization": `Bearer ${accessToken}`,
+          authorization: `Bearer ${accessToken}`,
         },
       };
       options = optionsData;
@@ -88,7 +93,10 @@ export const connectToProtectedApi = async (endpoint,accessToken = "",method = "
   } else {
     optionsData = {
       ...options,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
     };
     options = optionsData;
   }

@@ -4,8 +4,8 @@ const jwt = require("jsonwebtoken");
 const authenticateUser = (req, res, next) => {
   try {
     if (req.headers.authorization) {
-      const token = req.headers.authorization.split(" ")[1];
-      const verifyToken = jwt.verify(token, process.env.JWT_SECRET);
+      const accessToken = req.headers.authorization.split(" ")[1];
+      const verifyToken = jwt.verify(accessToken, process.env.JWT_SECRET);
       req.user = verifyToken
       next();
     } else {

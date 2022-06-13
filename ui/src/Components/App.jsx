@@ -9,12 +9,13 @@ import LatestPost from "./Post/LatestPost";
 import PostForm from "./Post/PostForm";
 import Login from "./User/Login";
 import Footer from "./Footer";
-import { AuthContext } from "./context/AuthContext";
+import ProtectedRoutes from "./ProtectedRoutes";
+import { AuthContext } from "../Context/AuthContext";
 
 function App() {
-  const[auth, SetAuth] = useState({})
+  const[auth, setAuth] = useState({})
   return (
-    <AuthContext.Provider>
+    <AuthContext.Provider value={{ auth, setAuth }}>
       <Router>
         <Navbar />
         <main>
@@ -25,15 +26,18 @@ function App() {
                 <div className="col-lg-8 col-md-7 col-sm-12">
                   <Routes>
                     <Route path="/" exact element={<PostList />} />
-                    <Route path="/post/:id" element={<PostDetail />} />
-                    <Route
-                      path="/post/add"
-                      element={<PostForm action={"add"} />}
-                    />
-                    <Route
-                      path="/post/edit/:id"
-                      element={<PostForm action={"add"} />}
-                    />
+                    <Route path="/"  element={<ProtectedRoutes />}>
+                      <Route path="/post/:id" element={<PostDetail />} />
+
+                      <Route
+                        path="/post/add"
+                        element={<PostForm action={"add"} />}
+                      />
+                      <Route
+                        path="/post/edit/:id"
+                        element={<PostForm action={"edit"} />}
+                      />
+                    </Route>
                     <Route path="/login" element={<Login />} />
                   </Routes>
                 </div>
