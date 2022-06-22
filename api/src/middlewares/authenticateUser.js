@@ -6,14 +6,14 @@ const authenticateUser = (req, res, next) => {
     if (req.headers.authorization) {
       const accessToken = req.headers.authorization.split(" ")[1];
       const verifyToken = jwt.verify(accessToken, process.env.JWT_SECRET);
-      req.user = verifyToken
+      req.user = verifyToken;
       next();
     } else {
-      return res.status(403).json({ message: "UnAuthorized" });
+      return res.status(401).json({ message: "UnAuthorized" });
     }
   } catch (error) {
-    console.error(error);
-    res.status(403).json({
+    // console.error(error);
+    res.status(401).json({
       status: true,
       message: error.message,
     });

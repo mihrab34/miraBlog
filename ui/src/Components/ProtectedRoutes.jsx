@@ -1,11 +1,14 @@
-import{useContext} from "react";
-import {Outlet, Navigate} from "react-router-dom";
-import {AuthContext} from "../Context/AuthContext";
+import { Outlet, Navigate } from "react-router-dom";
+import useRefreshToken from "../Hooks/useRefreshToken";
+import useAuth from "../Hooks/useAuth";
 
 export default function ProtectedRoutes() {
-    const {auth} = useContext(AuthContext);
+  const { auth } = useAuth();
+  const { refreshToken } = useRefreshToken();
 
-    return (
-        auth.user ? <Outlet/> : <Navigate to="/login" replace={true} />
-    )
+  return auth?.user || refreshToken ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/login" replace={true} />
+  );
 }

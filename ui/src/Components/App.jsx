@@ -26,9 +26,8 @@ function App() {
                 <div className="col-lg-8 col-md-7 col-sm-12">
                   <Routes>
                     <Route path="/" exact element={<PostList />} />
-                    <Route path="/"  element={<ProtectedRoutes />}>
+                    <Route path="/post"  element={<ProtectedRoutes />}>
                       <Route path="/post/:id" element={<PostDetail />} />
-
                       <Route
                         path="/post/add"
                         element={<PostForm action={"add"} />}

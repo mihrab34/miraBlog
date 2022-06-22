@@ -1,13 +1,12 @@
-import { connectToApi } from "../../lib/helper";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
+import useApi from "../../Hooks/useApi";
 
 const initialValues = {
   image: "",
   article: "",
   author: "",
   comment_count: 0,
-  // comments: [],
   date: new Date(),
   dislike_count: 0,
   like_count: 0,
@@ -17,6 +16,7 @@ const initialValues = {
 };
 
 export default function PostForm(props) {
+  const { uploadCall} = useApi();
   const [post, setPost] = useState(initialValues);
   const { id } = useParams();
 
@@ -28,18 +28,16 @@ export default function PostForm(props) {
       setPost({ ...post, [name]: value });
     }
   };
-  // console.log(post);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const action = props.action;
-
     switch (action) {
       case "add":
-        await connectToApi("/posts", "POST", post, true);
+        await uploadCall("/posts", "POST", post);
         break;
       case "edit":
-        await connectToApi("/posts/" + id, "PUT", post);
+        await uploadCall("/posts/" + id, "PUT", post);
         break;
       default:
         break;

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useApi from "../../Hooks/useApi";
+import useRefreshToken from "../../Hooks/useRefreshToken";
 
 export default function Login() {
   let navigate = useNavigate();
+  const {storeRefreshToken, refreshToken} = useRefreshToken();
   const { logIn, setAuth } = useApi();
   const [user, setUser] = useState({
     username: "",
@@ -20,11 +22,13 @@ export default function Login() {
     const response = await logIn(user);
     if (response.status) {
       setAuth(response.data);
-      navigate("/");
+      storeRefreshToken(response.data.refreshToken);
+      navigate("/" , {replace: true});
     } else {
       alert(response.message);
     }
   };
+  
 
   return (
     <form onSubmit={handleLogin}>

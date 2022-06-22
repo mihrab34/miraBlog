@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import useApi from "../Hooks/useApi";
 
 export default function Navbar() {
+  const { refreshToken, auth, logout } = useApi();
   return (
     <header>
       <div className="navbar navbar-dark bg-dark shadow-sm">
@@ -14,7 +16,17 @@ export default function Navbar() {
             </Link>
           </div>
           <ul className="navbar-nav justify-content-end ">
-            <li className="nav-item"><Link to="/login" className="nav-link">Sign In</Link></li>
+            {auth.user || refreshToken ? (
+              <button className="btn btn-light" onClick={() =>logout()}>
+                LogOut
+              </button>
+            ) : (
+              <li className="nav-item">
+                <Link to="/login" className="nav-link">
+                  Sign in
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>

@@ -1,14 +1,15 @@
 import React, { useEffect, useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import Reaction from "../Reaction/Reaction";
-import { connectToApi } from "../../lib/helper";
 import TimeAgo from "./TimeAgo";
-import {PostContext} from "../../Context/PostContext";
+import { PostContext } from "../../Context/PostContext";
+import useApi from "../../Hooks/useApi";
 
 export default function Post(props) {
-  let blogPost = useContext(PostContext); ;
-  if(props.post) {
-    blogPost = props.post
+  const { protectedCall } = useApi();
+  let blogPost = useContext(PostContext);
+  if (props.post) {
+    blogPost = props.post;
   }
   const [post, setPost] = useState({});
 
@@ -18,14 +19,14 @@ export default function Post(props) {
 
   const handleLike = async () => {
     const { _id: id } = post;
-    const response = await connectToApi(`/posts/${id}/like`, "PUT");
+    const response = await protectedCall(`/posts/${id}/like`, "PUT");
     setPost(response.data);
     alert("like post");
   };
 
   const handleDislike = async () => {
     const { _id: id } = post;
-    const response = await connectToApi(`/posts/${id}/dislike`, "PUT");
+    const response = await protectedCall(`/posts/${id}/dislike`, "PUT");
     setPost(response.data);
   };
 
@@ -33,33 +34,13 @@ export default function Post(props) {
   const { single = false } = props;
   return (
     <div className="card shadow-sm mb-4">
-      {image ? (
-        <img
-          src={image}
-          alt="Post-Cover"
-          className="card-img-top"
-          width="100%"
-          height="750"
-        />
-      ) : (
-        <svg
-          className="bd-placeholder-img card-img-top"
-          width="100%"
-          height="225"
-          xmlns="http://www.w3.org/2000/svg"
-          role="img"
-          aria-label="Placeholder: Thumbnail"
-          preserveAspectRatio="xMidYMid slice"
-          focusable="false"
-        >
-          <title>Placeholder</title>
-          <rect width="100%" height="100%" fill="#55595c" />
-          <text x="50%" y="50%" fill="#eceeef" dy=".3em">
-            Thumbnail
-          </text>
-        </svg>
-      )}
-
+      <img
+        src={image}
+        alt="Post-Cover"
+        className="card-img-top"
+        width="100%"
+        height="750"
+      />
       <div className="card-body">
         <div className="card-title text-center py-3">
           <h3>{post_title}</h3>
