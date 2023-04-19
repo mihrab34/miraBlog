@@ -21,7 +21,6 @@ export default function Post(props) {
     const { _id: id } = post;
     const response = await protectedCall(`/posts/${id}/like`, "PUT");
     setPost(response.data);
-    alert("like post");
   };
 
   const handleDislike = async () => {

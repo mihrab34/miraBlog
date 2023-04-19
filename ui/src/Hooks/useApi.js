@@ -13,7 +13,6 @@ const useApi = () => {
     endpoint,
     method = "GET",
     data = null,
-    upload = false
   ) => {
     try {
       controller = new AbortController();
@@ -23,6 +22,7 @@ const useApi = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include',
         signal: controller.signal,
       };
 
@@ -50,6 +50,7 @@ const useApi = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         signal: controller.signal,
       };
 
@@ -161,7 +162,7 @@ const useApi = () => {
       alert("You have been logged out");
       const method = "POST";
       const logoutEndpoint = "/users/logout";
-      const response = await apiCall(logoutEndpoint, method, { refreshToken });
+      const response = await apiCall(logoutEndpoint, method, {refreshToken});
       if (response.ok) {
         clearRefreshToken();
         setAuth({});

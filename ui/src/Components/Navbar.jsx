@@ -11,6 +11,7 @@ export default function Navbar() {
             <strong>Home</strong>
           </Link>
           <div className="navbar-toggler">
+            
             <Link to="post/add" className="btn btn-dark">
               New Post
             </Link>

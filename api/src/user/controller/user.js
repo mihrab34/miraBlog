@@ -27,45 +27,6 @@ exports.register = async (req, res) => {
   }
 };
 
-const createTokens = (user) => {
-  try {
-    if (user) {
-      const payload = {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-      };
-      const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: "1m",
-      });
-      delete payload.email;
-      const refreshToken = jwt.sign(payload, process.env.REFRESH_SECRET, {
-        expiresIn: "1h",
-      });
-      return res.status(200).json({
-        status: true,
-        message: "Login successful",
-        data: {
-          user,
-          accessToken,
-          refreshToken,
-        },
-      });
-    } else {
-      return res.status(400).json({
-        status: false,
-        message: "User Not Found",
-      });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      status: true,
-      message: error.message,
-    });
-  }
-};
-
 exports.login = async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
@@ -91,15 +52,22 @@ exports.login = async (req, res) => {
         delete user.password;
         user.token = refreshToken;
         await user.save();
-        return res.status(200).json({
-          status: true,
-          message: "Login successful",
-          data: {
-            user,
-            accessToken,
-            refreshToken,
-          },
-        });
+        return res
+          .status(200)
+          .cookie("refreshToken", refreshToken, {
+            maxAge: 360000,
+            secure: true,
+            httpOnly: true,
+          })
+          .json({
+            status: true,
+            message: "Login successful",
+            data: {
+              user,
+              accessToken,
+              refreshToken,
+            },
+          });
       } else {
         return res.status(400).json({
           status: false,
@@ -114,12 +82,12 @@ exports.login = async (req, res) => {
 
 exports.refresh = async (req, res) => {
   try {
-    const refreshToken = req.body.refreshToken;
+    const refreshToken = req.cookies.refreshToken;
     const verifyRefreshToken = jwt.verify(
       refreshToken,
       process.env.REFRESH_SECRET
     );
-    const user = await User.findOne({ username: verifyRefreshToken.username });
+    const user = await User.findOne({ token: refreshToken });
     if (user) {
       const payload = {
         id: user._id,
@@ -133,15 +101,22 @@ exports.refresh = async (req, res) => {
       const refreshToken = jwt.sign(payload, process.env.REFRESH_SECRET, {
         expiresIn: "1h",
       });
-      return res.status(200).json({
-        status: true,
-        message: "Refresh successful",
-        data: {
-          user,
-          accessToken,
-          refreshToken,
-        },
-      });
+      return res
+        .status(200)
+        .cookie("refreshToken", refreshToken, {
+          maxAge: 360000,
+          secure: true,
+          httpOnly: true,
+        })
+        .json({
+          status: true,
+          message: "Refresh successful",
+          data: {
+            user,
+            accessToken,
+            refreshToken,
+          },
+        });
     } else {
       return res.status(400).json({
         status: false,
@@ -157,22 +132,24 @@ exports.refresh = async (req, res) => {
   }
 };
 
-exports.logout = async(req, res) => {
+exports.logout = async (req, res) => {
   try {
-    const { refreshToken } = req.body;
+    const { refreshToken } = req.cookies;
     const user = await User.findOne({ token: refreshToken });
+    if (refreshToken) {
+      res.clearCookie("refreshToken", { httpOnly: true, secure: true });
+    }
     if (user) {
       user.token = "";
       await user.save();
-      res.status(204).json({message: "LogOut Successful"})
-    }else {
-       res.status(204).json({ message: "User Not Found" });
+      res.status(204).json({ message: "LogOut Successful" });
+    } else {
+      res.status(204).json({ message: "User Not Found" });
     }
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: error.message });
   }
-  
 };
 exports.profile = async (req, res) => {
   try {
